@@ -41,12 +41,15 @@ namespace byte_by_byte
 
         public static bool StartDFS<T>(Node<T> startNode, T target)
         {
-            var dfsQueue = new Queue<Node<T>>();
-            dfsQueue.Enqueue(startNode);
+            var dfsStack = new Stack<Node<T>>();
+            dfsStack.Push(startNode);
+            var visitedMap = new HashSet<T>();
+            visitedMap.Add(startNode.value);
 
-            while(dfsQueue.Count != 0)
+
+            while(dfsStack.Count != 0)
             {
-                var currentNode = dfsQueue.Dequeue();
+                var currentNode = dfsStack.Pop();
 
                 if (currentNode.value.Equals(target))
                     return true;
@@ -54,7 +57,8 @@ namespace byte_by_byte
                 // If any child exists of the current node, enqueue them
                 foreach(var child in currentNode.Children)
                 {
-                    dfsQueue.Enqueue(child);
+                    if(!visitedMap.Contains(child.value))
+                        dfsStack.Push(child);
                 }
             }
 
