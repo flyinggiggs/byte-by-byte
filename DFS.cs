@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace byte_by_byte
 {
@@ -36,6 +37,7 @@ namespace byte_by_byte
             node2.Children.Add(node1);
 
             Console.WriteLine("Result: " + StartDFS<int>(node5, 1));
+            Console.WriteLine("Build order: " + String.Join(",", TopologicalSort<int>(node5, 1).Select(n => n.value)));
 
         }
 
@@ -45,7 +47,6 @@ namespace byte_by_byte
             dfsStack.Push(startNode);
             var visitedMap = new HashSet<T>();
             visitedMap.Add(startNode.value);
-
 
             while(dfsStack.Count != 0)
             {
@@ -63,6 +64,46 @@ namespace byte_by_byte
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Note: This does not work now. Need to fix it.
+        /// </summary>
+        /// <returns>The sort.</returns>
+        /// <param name="startNode">Start node.</param>
+        /// <param name="target">Target.</param>
+        /// <typeparam name="T">The 1st type parameter.</typeparam>
+        public static List<Node<T>> TopologicalSort<T>(Node<T> startNode, T target)
+        {
+            var dfsStack = new Stack<Node<T>>();
+            dfsStack.Push(startNode);
+
+            var visitedMap = new HashSet<T>();
+            visitedMap.Add(startNode.value);
+
+            var topologicalSortList = new List<Node<T>>();
+            topologicalSortList.Add(startNode);
+
+            while (dfsStack.Count != 0)
+            {
+                var currentNode = dfsStack.Pop();
+                topologicalSortList.Remove(currentNode);
+
+                if (currentNode.value.Equals(target))
+                    return topologicalSortList;
+
+                // If any child exists of the current node, enqueue them
+                foreach (var child in currentNode.Children)
+                {
+                    if (!visitedMap.Contains(child.value))
+                    {
+                        dfsStack.Push(child);
+                        topologicalSortList.Add(child);
+                    }
+                }
+            }
+
+            return topologicalSortList;
         }
     }
 
