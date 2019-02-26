@@ -10,7 +10,7 @@ namespace byte_by_byte
         {
             PracticeDFS();
             Q15();
-
+            Q16.StartQ16();
             Console.ReadLine();
         }
 
@@ -28,12 +28,14 @@ namespace byte_by_byte
             new int[] { 0 },
             new int[] { 1, 2 },
             new int[] { 3 },
-        };
+            };
 
             var result = BuildOrder(input);
             Console.Write("Order: " + String.Join(",", result));
 
         }
+
+
 
         static List<int> BuildOrder(int[][] input)
         {
