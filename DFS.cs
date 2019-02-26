@@ -15,7 +15,6 @@ namespace byte_by_byte
             this.value = value;
         }
 
-
     }
     public class DFS
     {
